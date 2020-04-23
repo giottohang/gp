@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+    <link href="/resource/js/bstable/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/resource/js/bstable/css/bootstrap-table.css" rel="stylesheet" type="text/css">
+    <link href="/resource/css/table.css" rel="stylesheet" type="text/css">
+</head>
+<style>
+
+</style>
+<body style="background-color: #ecf0f5;font-family: 楷体;color: #475059;overflow: auto">
+<div class="notice_main ">
+    <div class="notice_check" style="padding: 16px 15px 8px 15px">
+        <p>
+            <label class="">标题：</label>
+            <input type="text" id="title" class="find_input" style="width: 200px; ">
+            <button class="check_btn" id="search">查询</button>
+        </p>
+    </div>
+    <table id="productTables" lay-filter="productTables"></table>
+</div>
+<script type="text/html" id="operate">
+    {{#  if(d.state=='0'){ }}
+    <a class="toolbarMy" lay-event="edit">通过</a>
+    <a class="toolbarMy" lay-event="del">不通过</a>
+    {{#  } }}
+</script>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['table', 'layer', 'laydate', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            laydate = layui.laydate,
+            form = layui.form;
+        table.render({
+            elem: '#productTables'
+            , url: '/video/video.do' //数据接口
+            , method: 'get'
+            , page: true //开启分页
+            , id: 'tableId'
+            , limits: [3,10, 15, 30]
+            , limit: 15
+            , cols: [
+                [ //表头
+                    {field: 'title', title: '标题'}
+                    , {field: 'userName', title: '上传用户'}
+                    , {field: 'url', title: '作品地址'}
+                    , {field: 'img', title: '封面图'}
+                    , {field: 'info', title: '描述'}
+                    , {field: 'time', title: '上传时间'}
+                    , {title: '操作', toolbar: '#operate', 'fixed': 'right'}
+                ]
+            ]
+        });
+        //搜索
+        $('#search').on('click', function () {
+            active.reload()
+        });
+        //监听工具条
+        table.on('tool(productTables)', function (obj) {
+            var data = obj.data;
+            console.log(data);
+            if (obj.event === 'del') {
+                //删除
+                delProduct(data.id);
+            } else if (obj.event === "edit") {
+                $.ajax({
+                    url: "/video/video.do",
+                    type: "put",
+                    data: {"id": data.id, "state": "1"},
+                    dataType: "json",
+                    success: function (result) {
+                        if (!result.status) {
+                            layer.msg(result.msg, {time: 2000});
+                            layer.msg("成功!", {time: 1000});
+                            return false;
+                        }
+                        active.reload();
+                    }
+                });
+            }
+        });
+
+        //删除函数
+        function delProduct(id) {
+            layer.confirm('是否删除?', function (index) {
+                $.ajax({
+                    url: "/video/video.do",
+                    type: "post",
+                    data: {_method: "DELETE", "id": id},
+                    dataType: "json",
+                    success: function (result) {
+                        if (!result.status) {
+                            layer.msg(result.msg, {time: 2000});
+                            layer.msg("删除成功!", {time: 1000});
+                            return false;
+                        }
+                        active.reload();
+                    }
+                });
+                layer.close(index);
+            })
+        }
+
+        active = {
+            reload: function () {
+                var title = $("#title").val();
+                //执行重载
+                table.reload('tableId', {
+                    method: 'get'
+                    , page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        title: title,
+                    }
+                });
+            }
+        };
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,385 @@
+﻿<!DOCTYPE html>
+<html class="htmlBg" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title th:text="${wbeParameter.name}"></title>
+    <link rel="stylesheet" type="text/css" href="/resource/css/front/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/resource/css/front/style.css"/>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css">
+    <link rel="stylesheet" href="/resource/css/front/global.css">
+    <link rel="stylesheet" type="text/css" href="/resource/js/bootstrap/css/bootstrap.min.css"/>
+</head>
+<body class="bodyBg">
+<!--头部 Start!-->
+<div id="hd" class="wp clearfix" th:replace="front/public:: heads"></div>
+<!--头部 End!-->
+<!--导航 Start!-->
+<ul id="nav" class="clearfix wp" th:replace="front/public:: nav"></ul>
+<!--导航 End!-->
+
+<!--main Start!-->
+<div id="main" class="wp clearfix">
+    <div class="alert" style="float:right; width: 350px">
+    </div>
+    <div class="leftMenu fl">
+        <dl>
+            <dt>
+					<span>
+						<h4>作品详情</h4>
+						<h5>VIDEO DETAIL</h5>
+					</span>
+            </dt>
+        </dl>
+    </div>
+    <div class="rightCon fr">
+        <div class="conTop clearfix">
+            <div class="crumbs">
+                <a href="/front/index.do">首页</a>
+                <i>-</i>
+                <a href="/front/video.do">作品列表</a>
+                <i>-</i>
+                <span>作品详情</span>
+            </div>
+            <div class="conTit clearfix">
+                <span>作品详情</span>
+            </div>
+        </div>
+        <div class="conMain">
+            <div class="textInner">
+                <h2 th:text="${video.title}"></h2>
+                <div class="textInfo">
+                    <span th:text="${'发布时间： '+#strings.substring(video.time,0,19)}"></span>
+                    <i class="layui-icon likeBtn" title="点赞" th:id="${video.id}">&#xe6c6;</i> <span
+                        th:text="${video.likeNum}"></span>
+                    <i class="layui-icon nolikeBtn" title="踩" th:id="${video.id}">&#xe6c5;</i> <span
+                        th:text="${video.noLikeNum}"></span>
+                    <a class="collectBtn" th:if="${isCollect} and ${isUserSelf}" th:id="${userId}"
+                       style="color: #0D8BBD;margin-left: 20px">取消关注</a>
+                    <a class="collectBtn" th:if="${!isCollect} and ${isUserSelf}" th:id="${userId}"
+                       style="color: #0D8BBD;margin-left: 20px">关注</a>
+                    <a class="collectionBtn" th:if="${isCollection}" th:id="${video.id}"
+                       style="color: #0D8BBD;margin-left: 20px">取消收藏</a>
+                    <a class="collectionBtn" th:if="${!isCollection}" th:id="${video.id}"
+                       style="color: #0D8BBD;margin-left: 20px">收藏</a>
+                    <a class="jubao" th:if="${video.state eq'1'}" th:id="${video.id}"
+                       style="color: #0D8BBD;margin-left: 20px">举报</a>
+                </div>
+                <div class="oneImg" th:if="${video.type eq'视频'}">
+                    <video controls style="width: 800px">
+                        <source th:src="${video.url}" type="video/mp4">
+                    </video>
+                </div>
+                <div class="oneImg" th:if="${video.type eq'音频'}">
+                    <audio controls style="width: 800px">
+                        <source th:src="${video.url}" type="audio/mp3">
+                        <source th:src="${video.url}" type="audio/wma">
+                    </audio>
+                </div>
+                <div class="oneImg" th:if="${video.type eq'图片'}">
+                    <p th:each="img:${video.imgList}"><a th:href="${img}" target="_blank"><img class="jqzoom"
+                                                                                               th:src="${img}"
+                                                                                               th:alt="${img}"
+                                                                                               style="width: 300px;height: 200px"></a>
+                    </p>
+                </div>
+                <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
+                    <legend>作品描述</legend>
+                </fieldset>
+                <p th:utext="${video.info}"></p>
+                <div class="fly-panel detail-box" id="flyReply">
+                    <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
+                        <legend>评价</legend>
+                    </fieldset>
+                    <ul class="jieda" id="jieda">
+                        <li data-id="111" class="jieda-daan" th:each="comment:${commentList}">
+                            <a name="item-1111111111"></a>
+                            <div class="detail-about detail-about-reply">
+                                <a class="fly-avatar">
+                                    <img th:src="${comment.user.imgUrl}">
+                                </a>
+                                <div class="fly-detail-user">
+                                    <a class="fly-link">
+                                        <cite th:text="${comment.user.userName}">贤心</cite>
+                                    </a>
+                                    <span style="color:#999" th:if="${comment.user.status eq'0'}">（该号已被封）</span>
+                                </div>
+
+                                <div class="detail-hits">
+                                    <span th:text="${#strings.substring(comment.time,0,19)}">2017-11-30</span>
+                                </div>
+                            </div>
+                            <div class="detail-body jieda-body photos">
+                                <p th:utext="${comment.content}"></p>
+                            </div>
+                            <div class="jieda-reply" th:id="${comment.userId+','+comment.user.userName}">
+                                <span type="reply"><i class="iconfont icon-svgmoban53"></i>回复</span>
+                                <div class="jieda-admin">
+                                <span th:id="${comment.id}" class="jieda-del" type="del"
+                                      th:if="${comment.isMe eq '1'}">删除</span>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- 无数据时 -->
+                        <!-- <li class="fly-none">消灭零回复</li> -->
+                    </ul>
+
+                    <div class="layui-form layui-form-pane" th:if="${go_in}">
+                        <div>
+                            <input hidden name="videoId" th:value="${video.id}">
+                            <div class="layui-form-item layui-form-text">
+                                <a name="comment"></a>
+                                <div class="layui-input-block">
+                                <textarea id="editor" name="content"
+                                          placeholder="请输入内容" class="layui-textarea fly-editor"
+                                          style="height: 150px;"></textarea>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <button class="layui-btn" lay-filter="Submit" lay-submit>提交回复</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--main End!-->
+
+<!--底部 Start!-->
+<div id="ft" th:replace="front/public:: footer"></div>
+<!--底部 End!-->
+</body>
+<script src="/resource/js/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript" src="/resource/js/remindMessage.js"></script>
+<script type="text/javascript" src="/resource/js/bootstrap/js/bootstrap.min.js"></script>
+<script th:inline="javascript">
+    layui.use(['table', 'layer', 'element', 'form', 'laypage', 'layedit'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            element = layui.element,
+            layedit = layui.layedit,
+            layer = layui.layer,
+            laypage = layui.laypage,
+            form = layui.form;
+        var replyContent = ''
+        //回复
+        $('.jieda-reply').on('click', function () {
+            var user = $(this).attr("id");
+            replyContent = replyContent + " <a href='/front/otherHome.do?id=" + user.split(",")[0] + "'>@" + user.split(",")[1] + "</a>"
+            console.log(replyContent)
+            layedit.setContent(index, replyContent)
+        })
+        //点赞
+        $('.likeBtn').on('click', function () {
+            var id = $(this).attr("id");
+            $.ajax({
+                url: '/front/getALike.do',
+                type: 'post',
+                data: {"videoId": id, "type": "赞"},
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        parent.layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        layer.msg(result.msg, {
+                            time: 900,
+                            end: function () {
+                                location.reload()
+                            }
+                        })
+                    }
+                }
+            });
+        })
+        //点赞
+        $('.nolikeBtn').on('click', function () {
+            var id = $(this).attr("id");
+            $.ajax({
+                url: '/front/getALike.do',
+                type: 'post',
+                data: {"videoId": id, "type": "踩"},
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        parent.layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        layer.msg(result.msg, {
+                            time: 900,
+                            end: function () {
+                                location.reload()
+                            }
+                        })
+                    }
+                }
+            });
+        })
+        //关注
+        $('.collectBtn').on('click', function () {
+            var id = $(this).attr("id");
+            $.ajax({
+                url: '/front/collect.do',
+                type: 'post',
+                data: {"videoId": id},
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        parent.layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        layer.msg(result.msg, {
+                            time: 900,
+                            end: function () {
+                                location.reload()
+                            }
+                        })
+                    }
+                }
+            });
+        })
+        //收藏
+        $('.collectionBtn').on('click', function () {
+            var id = $(this).attr("id");
+            $.ajax({
+                url: '/front/collections.do',
+                type: 'post',
+                data: {"videoId": id},
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        parent.layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        layer.msg(result.msg, {
+                            time: 900,
+                            end: function () {
+                                location.reload()
+                            }
+                        })
+                    }
+                }
+            });
+        })
+        //举报
+        $('.jubao').on('click', function () {
+            var id = $(this).attr("id");
+            $.ajax({
+                url: "/video/video.do",
+                type: "put",
+                data: {"id": id, "state": "0"},
+                dataType: "json",
+                success: function (result) {
+                    if (result.status) {
+                        layer.msg("举报成功", {
+                            time: 900,
+                            end: function () {
+                                location.reload()
+                            }
+                        })
+                    } else {
+                        layer.msg("失败")
+                    }
+                }
+            });
+        })
+        //删除评论
+        $('.jieda-del').on('click', function () {
+            var id = $(this).attr("id");
+            $.ajax({
+                url: '/front/delComment.do',
+                type: 'post',
+                data: {"id": id},
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        parent.layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        layer.msg("删除成功!", {
+                            time: 900,
+                            end: function () {
+                                location.reload()
+                            }
+                        })
+                    }
+                }
+            });
+        })
+        form.on('submit(Submit)', function (data) {
+            data.field.content = layedit.getContent(index)
+            if (data.field.content == '' || data.field.content == null) {
+                layer.msg('留言内容不能为空!', {icon: 5});
+                return false;
+            }
+            $.ajax({
+                url: '/front/addComment.do',
+                type: 'post',
+                data: data.field,
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        parent.layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        layer.msg("评论成功!", {
+                            time: 900,
+                            end: function () {
+                                location.reload()
+                            }
+                        })
+                    }
+                }
+
+            });
+        });
+        layedit.set({
+            //暴露layupload参数设置接口 --详细查看layupload参数说明
+            uploadImage: {
+                url: '/layeditUpload.do',
+                accept: 'image',
+                acceptMime: 'image/*',
+                exts: 'jpg|png|gif|bmp|jpeg',
+                size: '10240'
+            }
+            , uploadVideo: {
+                url: '/layeditUpload.do',
+                accept: 'video',
+                acceptMime: 'video/*',
+                exts: 'mp4|flv|avi|rm|rmvb',
+                size: '20480'
+            }
+            //右键删除图片/视频时的回调参数，post到后台删除服务器文件等操作，
+            //传递参数：
+            //图片： imgpath --图片路径
+            //视频： filepath --视频路径 imgpath --封面路径
+            , calldel: {
+                url: '/Attachment/DeleteFile'
+            }
+            //开发者模式 --默认为false
+            , devmode: true
+            //插入代码设置
+            , codeConfig: {
+                hide: true,  //是否显示编码语言选择框
+                default: 'javascript' //hide为true时的默认语言格式
+            }
+            , tool: [
+                'code', 'strong', 'italic', 'underline', 'del', 'addhr', 'fontFomatt', 'face'
+                , 'left', 'center', 'right', 'link', 'unlink', 'images', 'image_alt', 'video', 'anchors'
+                , 'table', 'fullScreen']
+
+        });
+        var index = layedit.build('editor', {
+            height: 400 //设置编辑器高度
+        });
+    });
+</script>
+</html>

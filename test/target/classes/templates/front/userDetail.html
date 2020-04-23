@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html class="htmlBg" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title th:text="${wbeParameter.name}"></title>
+    <link rel="stylesheet" type="text/css" href="/resource/css/front/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/resource/css/front/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/resource/js/bootstrap/css/bootstrap.min.css"/>
+</head>
+<body class="bodyBg">
+<!--头部 Start!-->
+<div id="hd" class="wp clearfix" th:replace="front/public:: heads"></div>
+<!--头部 End!-->
+<!--导航 Start!-->
+<ul id="nav" class="clearfix wp" th:replace="front/public:: nav"></ul>
+<!--导航 End!-->
+
+<!--main Start!-->
+<div id="main" class="wp clearfix">
+    <div class="alert" style="float:right; width: 350px">
+    </div>
+    <div class="leftMenu fl">
+        <dl>
+            <dt>
+					<span>
+						<h4>作品列表</h4>
+						<h5>VIDEO</h5>
+					</span>
+            </dt>
+        </dl>
+    </div>
+    <div class="rightCon fr">
+        <div class="conTop clearfix">
+            <div class="crumbs">
+                <a href="index.html">首页</a>
+                <i>-</i>
+                <span>用户</span>
+            </div>
+            <div class="conTit clearfix">
+                <span>作品列表</span>
+            </div>
+        </div>
+        <div class="conMain">
+            <div class="conMain">
+                <div class="instrument">
+                    <div class="instItem">
+                        <!--<h3><span></span>运动技能研究中心设备</h3>-->
+                        <ul class="clearfix">
+                            <li th:each="video:${videoList}">
+                                <a th:href="${'/front/videoDetail.do?id='+video.id}">
+                                    <div class="imgWp">
+                                        <span><img th:src="${video.img}" style="width: 216px;height: 144px"></span>
+                                    </div>
+                                    <p th:text="${video.title}"></p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--main End!-->
+
+<!--底部 Start!-->
+<div id="ft" th:replace="front/public:: footer"></div>
+<!--底部 End!-->
+</body>
+<script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/resource/js/remindMessage.js"></script>
+<script type="text/javascript" src="/resource/js/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+        //动态新闻焦点图片
+        var focus = $('.focus');
+        var focusLi = $('.focus').find('li');
+        var fCount = focusLi.length;
+        var fNum = 0;
+        var timer = null;
+
+        for (var i = 0; i < fCount; i++) {
+            var dot = '<span></span>';
+            $('.dots').append(dot);
+        }
+
+        function focusMove() {
+            focusLi.eq(fNum).fadeIn().siblings().fadeOut();
+            $('.dots').find('span').eq(fNum).addClass('active').siblings().removeClass('active');
+        }
+
+        focusMove();
+        $('.dots').on('click', 'span', function () {
+            fNum = $(this).index();
+            focusMove();
+        });
+        timer = setInterval(function () {
+            fNum++;
+            fNum %= fCount;
+            focusMove();
+        }, 5000);
+
+
+        //仪器设备图片切换
+        var equ = $('.equipment');
+        var equUl = equ.find('ul');
+        var equLi = equUl.find('li');
+        var equCount = equLi.length;
+        var equPrev = $('.equPrev');
+        var equNext = $('.equNext');
+        var equMax = 5;
+        var space = 236;
+        var equNum = 0;
+
+        equUl.width(space * equCount);
+        if (equCount > equMax) {
+            equNext.show();
+        }
+
+        function equMove() {
+            if (!equUl.is(':animated')) {
+                equUl.animate({left: -space * equNum}, 400);
+            }
+        }
+
+        equNext.on('click', function () {
+            if (equNum == equCount - equMax) {
+                equNext.hide();
+                return false;
+            } else {
+                equNum++;
+            }
+            equMove();
+            equPrev.show();
+        });
+        equPrev.on('click', function () {
+            if (equNum == 0) {
+                equPrev.hide();
+                return false;
+            } else {
+                equNum--;
+            }
+            equMove();
+            equNext.show();
+        });
+    });
+</script>
+</html>

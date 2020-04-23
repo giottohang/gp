@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+    <link href="/resource/css/book02.css" rel="stylesheet" type="text/css">
+</head>
+
+<style>
+    .layui-edge {
+        display: none;
+    }
+</style>
+<body class="index">
+<div class="book_con01">
+    <h1 class="book_h01">上传作品</h1>
+    <div class="layui-form">
+        <div class="top">
+            <div>
+                <div class="top_out">
+                    <table class="table" style="width: 100%">
+                        <tbody>
+                        <tr>
+                            <td>标题<span>*</span></td>
+                            <td colspan="8"><input type="text" class="layui-input" name="title" placeholder="请输入标题"
+                                                   minlength="2"
+                                                   lay-verify="required"></td>
+                        </tr>
+                        <tr>
+                            <td>分类<span>*</span></td>
+                            <td colspan="8">
+                                <select name="ptId">
+                                    <option th:each="course:${courseList}" th:text="${course.name}"
+                                            th:value="${course.id}"></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>类型<span>*</span></td>
+                            <td colspan="8">
+                                <select name="type" lay-filter="type">
+                                    <option value="视频">视频</option>
+                                    <option value="音频">音频</option>
+                                    <option value="图片">图片</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <input hidden name="url" id="url"></td>
+                        <tr class="video">
+                            <td>视频<span>*</span></td>
+                            <td><input type="text" id="videoSrc" readonly class="layui-input" style="width: 40%">
+
+                        </tr>
+                        <tr class="audio" style="display: none">
+                            <td>音频<span>*</span></td>
+                            <td><input type="text" id="audioSrc" readonly class="layui-input" style="width: 40%">
+                        </tr>
+                        <tr class="img" style="display: none">
+                            <td>图片<span>*</span></td>
+                            <td><input type="text" id="imgSrc" readonly class="layui-input" style="width: 40%">
+                        </tr>
+                        <tr class="fenMian">
+                            <td>封面图<span>*</span></td>
+                            <td><input type="text" id="fenMianSrc" readonly class="layui-input" style="width: 40%">
+                                <input hidden name="img" id="img"></td>
+                        </tr>
+                        <tr>
+                            <td>描述<span>*</span></td>
+                            <td colspan="8" style="text-align: left">
+                                <textarea id="editor" class=" layui-textarea" name="info"
+                                          style="height: 200px"></textarea>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class=" but_p">
+            <button class="but_save" type="submit" lay-submit="" lay-filter="Submit">发布</button>
+        </div>
+        <div style="clear: both;padding-bottom: 40px"></div>
+    </div>
+</div>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['table', 'layer', 'upload', 'form', 'layedit'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            layedit = layui.layedit,
+            upload = layui.upload,
+            form = layui.form;
+        //上传视频
+        upload.render({
+            elem: '#videoSrc'
+            , url: '/upload.do'
+            , accept: 'video'
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                $("#url").val(res.obje);
+                $("#videoSrc").val(res.obje);
+                return layer.msg('上传成功');
+            }
+            , error: function () {
+                return layer.msg('上传失败');
+            }
+        });
+        //上传音频
+        upload.render({
+            elem: '#audioSrc'
+            , url: '/upload.do'
+            , accept: 'file'
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                $("#url").val(res.obje);
+                $("#audioSrc").val(res.obje);
+                return layer.msg('上传成功');
+            }
+            , error: function () {
+                return layer.msg('上传失败');
+            }
+        });
+        //多图片上传
+        upload.render({
+            elem: '#imgSrc'
+            , url: '/upload.do'
+            , multiple: true
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传完毕
+                if ($("#imgSrc").val() != '') {
+                    $("#url").val($("#url").val() + "," + res.obje);
+                    $("#imgSrc").val($("#imgSrc").val() + "," + res.obje);
+                } else {
+                    $("#url").val(res.obje);
+                    $("#imgSrc").val(res.obje)
+                }
+            }
+        });
+        //封面图上传
+        upload.render({
+            elem: '#fenMianSrc'
+            , url: '/upload.do'
+            , accept: 'images'
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                $("#img").val(res.obje);
+                $("#fenMianSrc").val(res.obje);
+                return layer.msg('上传成功');
+            }
+            , error: function () {
+                return layer.msg('上传失败');
+            }
+        });
+        form.on('select(type)', function (data) {
+            var type = data.value;
+            if (type == '视频') {
+                $('#url').val("")
+                $('.video').show();
+                $('.fenMian').show();
+                $('.audio').hide();
+                $('.img').hide();
+            } else if (type == '音频') {
+                $('#url').val("")
+                $('.video').hide();
+                $('.fenMian').hide();
+                $('.audio').show();
+                $('.img').hide();
+            } else if (type == '图片') {
+                $('#url').val("")
+                $('.video').hide();
+                $('.fenMian').hide();
+                $('.audio').hide();
+                $('.img').show();
+            }
+
+        });
+        form.on('submit(Submit)', function (data) {
+            var type = data.field.type;
+            if (type == '音频') {
+                data.field.img = "/resource/img/audio.jpg";
+            } else if (type == '视频') {
+
+            } else if (type == '图片') {
+                data.field.img = data.field.url.split(",")[0];
+                if (data.field.url.split(",").length > 9) {
+                    layer.msg("图片不得超过9张")
+                    return false;
+                }
+            }
+            data.field.info = layedit.getContent(index)
+            $.ajax({
+                url: '/video/video.do',
+                type: 'post',
+                data: data.field,
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        parent.layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        layer.msg("新增成功!", {
+                            time: 900,
+                            end: function () {
+                                location.reload()
+                            }
+                        })
+                    }
+                }
+
+            });
+        });
+        layedit.set({
+            //暴露layupload参数设置接口 --详细查看layupload参数说明
+            uploadImage: {
+                url: '/layeditUpload.do',
+                accept: 'image',
+                acceptMime: 'image/*',
+                exts: 'jpg|png|gif|bmp|jpeg',
+                size: '10240'
+            }
+            , uploadVideo: {
+                url: '/layeditUpload.do',
+                accept: 'video',
+                acceptMime: 'video/*',
+                exts: 'mp4|flv|avi|rm|rmvb',
+                size: '20480'
+            }
+            //右键删除图片/视频时的回调参数，post到后台删除服务器文件等操作，
+            //传递参数：
+            //图片： imgpath --图片路径
+            //视频： filepath --视频路径 imgpath --封面路径
+            , calldel: {
+                url: '/Attachment/DeleteFile'
+            }
+            //开发者模式 --默认为false
+            , devmode: true
+            //插入代码设置
+            , codeConfig: {
+                hide: true,  //是否显示编码语言选择框
+                default: 'javascript' //hide为true时的默认语言格式
+            }
+            , tool: [
+                'code', 'strong', 'italic', 'underline', 'del', 'addhr', 'fontFomatt', 'face'
+                , 'left', 'center', 'right', 'link', 'unlink', 'images', 'image_alt', 'video', 'anchors'
+                , 'table', 'fullScreen']
+
+        });
+        var index = layedit.build('editor', {
+            height: 400 //设置编辑器高度
+        });
+    });
+
+</script>
+
+</body>
+</html>

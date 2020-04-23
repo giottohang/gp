@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html class="htmlBg" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title th:text="${wbeParameter.name}"></title>
+    <link rel="stylesheet" type="text/css" href="/resource/css/front/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/resource/css/front/style.css"/>
+</head>
+<body class="bodyBg">
+<!--头部 Start!-->
+<div id="hd" th:fragment="heads" class="wp clearfix">
+    <a href="index.html" class="hdLogo fl">
+        <span th:text="${wbeParameter.name}" style="font-size: x-large;color: #137ccd;font-family: 楷体"></span>
+    </a>
+    <!--<form class="hdSearch fr">-->
+    <!--<button></button>-->
+    <!--<input type="text" name="" placeholder="搜索">-->
+    <!--</form>-->
+</div>
+<!--头部 End!-->
+
+<!--导航 Start!-->
+<ul id="nav" th:fragment="nav" class="clearfix wp">
+    <li class="first"><a href="/front/index.do" class="navItem">首页</a></li>
+    <li>
+        <a class="navItem">艺术作品<i></i></a>
+        <div class="dropdown">
+            <a th:each="course:${courseList}" th:href="${'/front/video.do?ptId='+course.id}" th:text="${course.name}">新闻动态</a>
+        </div>
+    </li>
+    <li th:if="${go_in}">
+        <a href="/front/userCenter.do" class="navItem">个人中心</a>
+    </li>
+    <li th:if="${go_in}">
+        <a href="/logout.do" class="navItem">登出</a>
+    </li>
+    <li th:if="${!go_in}">
+        <a href="/login" class="navItem">登录</a>
+    </li>
+    <li th:if="${admin}">
+        <a href="/indexWbe" class="navItem">后台</a>
+    </li>
+</ul>
+<!--导航 End!-->
+<!--底部 Start!-->
+<div id="ft" th:fragment="footer">
+    <div class="wp">
+        <p>电话：<span th:text="${wbeParameter.iphone}"></span> 版本号：<span th:text="${wbeParameter.code}"></span></p>
+        <p>Copyright © <span th:text="${wbeParameter.copyright+' '+wbeParameter.year}"></span></p>
+    </div>
+</div>
+<!--底部 End!-->
+</body>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript">
+
+</script>
+</html>

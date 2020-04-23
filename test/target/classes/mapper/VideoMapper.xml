@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.it.mapper.VideoMapper">
+    <!-- 根据roleId查询旗下的所有用户-->
+    <select id="selectPopularList" resultType="com.it.entity.Video">
+		SELECT a.* from gm_video a, (SELECT videoId,count(type) as likeNumber from gm_likenumber where type='赞' GROUP BY videoId) b
+         where a.id=b.videoId ORDER BY likeNumber DESC
+	</select>
+
+    <select id="selectDataAnalysis" resultType="com.it.entity.vo.DataAnalysis">
+		SELECT  DATE_FORMAT(a.time,'%Y-%m-%d') as date,count(id) as num from gm_video a
+         group by DATE_FORMAT(a.time,'%Y-%m-%d')
+	</select>
+
+</mapper>

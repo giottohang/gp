@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+    <link href="/resource/js/bstable/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/resource/css/table.css" rel="stylesheet" type="text/css">
+</head>
+<style>
+    .layui-form-item {
+        width: 350px;
+    }
+</style>
+<body>
+<div class="notice_main ">
+
+    <div class="notice_check  notice_check_last">
+        <div class="notice_nav r_right">
+            <a class="btn btn-default" onclick="addClassify()"><span class="glyphicon glyphicon-plus"></span>新增分类</a>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <table id="classifyTables" lay-filter="classifyTables"></table>
+</div>
+<script type="text/html" id="operate">
+    <a class="toolbarMy" lay-event="del">删除</a>
+    <!--<a class="toolbarMy" lay-event="addChd">添加子分类</a>-->
+    <!--<a class="toolbarMy" lay-event="lookChd">查看子分类</a>-->
+</script>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    layui.use(['table', 'layer', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            form = layui.form;
+        var tableIns = table.render({
+            elem: '#classifyTables'
+            , url: '/course/course.do' //数据接口
+            , method: 'get'
+            , page: true //开启分页
+            , id: 'tableId'
+            , limits: [10, 15, 30]
+            , limit: 15
+            , cols: [
+                [ //表头
+                    {field: 'name', title: '分类'}
+                    , {field: 'english', title: '英文名称'}
+                    , {field: 'color', title: '颜色'}
+                    // , {field: 'chdName', title: '子分类'}
+                    , {title: '操作', toolbar: '#operate', 'fixed': 'right'}
+                ]
+            ]
+        });
+        addClassify = function () {
+            layer.open({
+                type: 2,
+                title: "新增分类",
+                shadeClose: false, //点击遮罩关闭层
+                area: ['700px', '378px'],
+                content: "/course/addCourse.do"
+            });
+        }
+        //监听工具条
+        table.on('tool(classifyTables)', function (obj) {
+            var data = obj.data;
+            console.log(data);
+            if (obj.event === 'del') {
+                //删除
+                delClassify(data.id);
+            } else if (obj.event === 'addChd') {
+                layer.open({
+                    type: 2,
+                    title: "新增子分类",
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['700px', '278px'],
+                    content: "/course/addBook.do?ptId=" + data.id
+                });
+            } else if (obj.event === 'lookChd') {
+                layer.open({
+                    type: 2,
+                    title: "查看子分类",
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['700px', '400px'],
+                    content: "/course/lookBook.do?ptId=" + data.id
+                });
+            }
+        });
+        active = {
+            reload: function () {
+                //执行重载
+                table
+                    .reload('tableId', {
+                        page: {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                    });
+            }
+        };
+
+        //删除分类函数
+        function delClassify(id) {
+            layer.confirm('是否删除?', function (index) {
+                $.ajax({
+                    url: "/course/course.do",
+                    type: "post",
+                    data: {_method: "DELETE", "id": id},
+                    dataType: "json",
+                    success: function (result) {
+                        if (!result.status) {
+                            layer.msg(result.msg, {time: 2000});
+                            return false;
+                        }
+                        layer.msg("删除成功!", {time: 1000});
+                        active.reload();
+                    }
+                });
+                layer.close(index);
+            })
+        }
+    });
+</script>
+
+</body>
+</html>

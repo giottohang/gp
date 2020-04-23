@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4a615fb1-39f5-474c-9e4b-68e2dd9bbb7a" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="D:\program\maven\MavenDownload" />
+        <option name="mavenHome" value="D:/program/maven/apache-maven-3.6.3" />
+        <option name="userSettingsFile" value="D:\program\maven\apache-maven-3.6.3\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1awIL9gxHteNwaUDEQVoWeLMe9C" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelOrder2" value="2" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RequestMappingsPanelWidth2" value="75" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="D:/gitlabSpace/hdi" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+  </component>
+  <component name="RunManager">
+    <configuration name="CaseJopApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="case" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.it.CaseJopApplication" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4a615fb1-39f5-474c-9e4b-68e2dd9bbb7a" name="Default Changelist" comment="" />
+      <created>1587640170134</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1587640170134</updated>
+      <workItem from="1587640172228" duration="333000" />
+      <workItem from="1587640800779" duration="531000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1587640255576">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1587640255576" />
+    <state x="689" y="303" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1587640245786">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="689" y="303" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1587640245786" />
+    <state x="734" y="261" key="FileChooserDialogImpl" timestamp="1587641328822">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="734" y="261" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1587641328822" />
+    <state width="1877" height="314" key="GridCell.Tab.0.bottom" timestamp="1587640518230">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="314" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1587640518230" />
+    <state width="1877" height="314" key="GridCell.Tab.0.center" timestamp="1587640518230">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="314" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1587640518230" />
+    <state width="1877" height="314" key="GridCell.Tab.0.left" timestamp="1587640518230">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="314" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1587640518230" />
+    <state width="1877" height="314" key="GridCell.Tab.0.right" timestamp="1587640518230">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="314" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587640518230" />
+    <state width="1877" height="314" key="GridCell.Tab.1.bottom" timestamp="1587640518230">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="314" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1587640518230" />
+    <state width="1877" height="314" key="GridCell.Tab.1.center" timestamp="1587640518230">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="314" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1587640518230" />
+    <state width="1877" height="314" key="GridCell.Tab.1.left" timestamp="1587640518230">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="314" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1587640518230" />
+    <state width="1877" height="314" key="GridCell.Tab.1.right" timestamp="1587640518230">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="314" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587640518230" />
+    <state width="1877" height="314" key="GridCell.Tab.2.bottom" timestamp="1587640518230">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="314" key="GridCell.Tab.2.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1587640518230" />
+    <state width="1877" height="314" key="GridCell.Tab.2.center" timestamp="1587640518230">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="314" key="GridCell.Tab.2.center/0.0.1920.1040@0.0.1920.1040" timestamp="1587640518230" />
+    <state width="1877" height="314" key="GridCell.Tab.2.left" timestamp="1587640518230">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="314" key="GridCell.Tab.2.left/0.0.1920.1040@0.0.1920.1040" timestamp="1587640518230" />
+    <state width="1877" height="314" key="GridCell.Tab.2.right" timestamp="1587640518230">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="314" key="GridCell.Tab.2.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587640518230" />
+    <state x="461" y="162" key="SettingsEditor" timestamp="1587640195927">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="461" y="162" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1587640195927" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/it/service/impl/ElasticsearchServiceImpl.java</url>
+          <line>145</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$MAVEN_REPOSITORY$/com/znlh/commons/1.0.2/commons-1.0.2.jar!/com/znlh/commons/excel/ExcelUtils.class</url>
+          <line>57</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/it/controller/VideoController.java</url>
+          <line>236</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

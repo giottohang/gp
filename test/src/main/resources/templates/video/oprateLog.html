@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+    <link href="/resource/js/bstable/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/resource/js/bstable/css/bootstrap-table.css" rel="stylesheet" type="text/css">
+    <link href="/resource/css/table.css" rel="stylesheet" type="text/css">
+</head>
+<style>
+
+</style>
+<body style="background-color: #ecf0f5;font-family: 楷体;color: #475059;overflow: auto">
+<div class="notice_main ">
+    <div class="notice_check" style="padding: 16px 15px 8px 15px">
+        <p>
+            <label class="">日期：</label>
+            <input type="text" id="date" class="find_input" style="width: 200px; ">
+            <button class="check_btn" id="search">查询</button>
+            <button class="check_btn" id="export" style="float: right">导出</button>
+        </p>
+    </div>
+    <table id="productTables" lay-filter="productTables"></table>
+</div>
+
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['table', 'layer', 'laydate', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            laydate = layui.laydate,
+            form = layui.form;
+        table.render({
+            elem: '#productTables'
+            , method: 'get'
+            , page: true //开启分页
+            , id: 'tableId'
+            , limits: [10, 15, 30]
+            , limit: 15
+            , cols: [
+                [ //表头
+                    {field: 'id', title: 'ID'}
+                    , {field: 'userName', title: '上传用户'}
+                    , {field: 'operation', title: '操作'}
+                    , {field: 'time', title: '上传时间'}
+                ]
+            ]
+        });
+        //搜索
+        $('#search').on('click', function () {
+            active.reload()
+        });
+
+        //导出
+        $('#export').on('click', function () {
+            var time = $("#date").val();
+            console.log(time);
+            $.ajax({
+                url: "/video/oprateLogExport.do",
+                type: "post",
+                data: {"date":time},
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                }
+            });
+            $.ajax({
+                url: "/video/oprateLogExport.do",
+                type: "post",
+                data: {"date": time},
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                }
+            });
+        });
+
+        active = {
+            reload: function () {
+                var time = $("#date").val();
+                if (date==""){
+                    alert("请输入日期");
+                }
+                //执行重载
+                table.reload('tableId', {
+                    url: '/video/selectOprateLog.do', //数据接口
+                    method: 'get'
+                    , page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        time: time,
+                    }
+                });
+            }
+        };
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html class="htmlBg" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title th:text="${wbeParameter.name}"></title>
+    <link rel="stylesheet" type="text/css" href="/resource/css/front/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/resource/css/front/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/resource/js/bootstrap/css/bootstrap.min.css"/>
+</head>
+<body class="bodyBg">
+<!--头部 Start!-->
+<div id="hd" class="wp clearfix" th:replace="front/public:: heads"></div>
+<!--头部 End!-->
+<!--导航 Start!-->
+<ul id="nav" class="clearfix wp" th:replace="front/public:: nav"></ul>
+<!--导航 End!-->
+<!--main Start!-->
+<div id="main" class="wp">
+    <div class="alert" style="float:right; width: 350px">
+    </div>
+    <div class="instrument">
+        <div class="instItem">
+
+            <h3><span></span>热门推荐</h3>
+            <ul class="clearfix">
+                <li th:each="video:${popularVideoList}" style="height:170px;">
+                    <a th:href="${'/front/videoDetail.do?id='+video.id}">
+                        <div class="imgWp">
+                            <span><img th:src="${video.img}" style="width: 216px;height: 144px"></span>
+                        </div>
+                    </a>
+                    <p><span th:text="${video.title+'  '+video.userName}"></span>
+                        <span class="collectBtn"
+                              th:id="${video.userId}"
+                              th:if="${!video.collectFlag} and ${video.userSelf}"
+                              style="color: #777777;margin-left: 10px">关注</span>
+                        <span class="collectBtn"
+                              th:id="${video.userId}"
+                              th:if="${video.collectFlag} and ${video.userSelf}"
+                              style="color: #777777;margin-left: 10px">取消关注</span>
+                    </p>
+                </li>
+            </ul>
+
+            <h3><span></span>最新作品</h3>
+            <ul class="clearfix">
+                <li th:each="video:${latestVideoList}" style="height:170px;">
+                    <a th:href="${'/front/videoDetail.do?id='+video.id}">
+                        <div class="imgWp">
+                            <span><img th:src="${video.img}" style="width: 216px;height: 144px"></span>
+                        </div>
+                    </a>
+                    <p><span th:text="${video.title+'  '+video.userName}"></span>
+                        <span class="collectBtn"
+                              th:id="${video.userId}"
+                              th:if="${!video.collectFlag} and ${video.userSelf}"
+                              style="color: #777777;margin-left: 10px">关注</span>
+                        <span class="collectBtn"
+                              th:id="${video.userId}"
+                              th:if="${video.collectFlag} and ${video.userSelf}"
+                              style="color: #777777;margin-left: 10px">取消关注</span>
+                    </p>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+<!--main End!-->
+
+<!--底部 Start!-->
+<div id="ft" th:replace="front/public:: footer"></div>
+<!--底部 End!-->
+</body>
+<script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript" src="/resource/js/remindMessage.js"></script>
+<script type="text/javascript" src="/resource/js/bootstrap/js/bootstrap.min.js"></script>
+<script th:inline="javascript">
+    layui.use(['table', 'layer', 'element', 'form', 'laypage', 'layedit'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            element = layui.element,
+            layedit = layui.layedit,
+            layer = layui.layer,
+            laypage = layui.laypage,
+            form = layui.form;
+        //关注
+        $('.collectBtn').on('click', function () {
+            var id = $(this).attr("id");
+            $.ajax({
+                url: '/front/collect.do',
+                type: 'post',
+                data: {"followId": id},
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        parent.layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        layer.msg(result.msg, {
+                            time: 900,
+                            end: function () {
+                                location.reload()
+                            }
+                        })
+                    }
+                }
+            });
+        })
+    });
+</script>
+</html>

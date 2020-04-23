@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html class="htmlBg" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title th:text="${wbeParameter.name}"></title>
+    <link rel="stylesheet" type="text/css" href="/resource/css/front/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/resource/css/front/style.css"/>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="/resource/js/bootstrap/css/bootstrap.min.css"/>
+</head>
+<body class="bodyBg">
+<!--头部 Start!-->
+<div id="hd" class="wp clearfix" th:replace="front/public:: heads"></div>
+<!--头部 End!-->
+<!--导航 Start!-->
+<ul id="nav" class="clearfix wp" th:replace="front/public:: nav"></ul>
+<!--导航 End!-->
+
+<!--main Start!-->
+<div id="main" class="wp clearfix">
+    <div class="alert" style="float:right; width: 350px">
+    </div>
+    <div class="leftMenu fl">
+        <dl>
+            <dd><a href="/front/userCenter.do">我的关注</a></dd>
+            <dd><a href="/front/userInfo.do">个人信息</a></dd>
+            <dt>
+					<span>
+						<h4>修改密码</h4>
+						<h5>EDIT PASSWORD</h5>
+					</span>
+            </dt>
+            <dd><a href="/front/upToVideo.do">上传作品</a></dd>
+            <dd><a href="/front/myVideo.do">我的作品</a></dd>
+            <dd><a href="/front/myCollectionsVideo.do">我的收藏</a></dd>
+        </dl>
+    </div>
+    <div class="rightCon fr">
+        <div class="conTop clearfix">
+            <div class="crumbs">
+                <a href="index.html">首页</a>
+                <i>-</i>
+                <span>个人中心</span>
+            </div>
+            <div class="conTit clearfix">
+                <span>修改密码</span>
+            </div>
+        </div>
+        <div class="conMain">
+            <div class="layui-form layui-row changePwd">
+                <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">用户名</label>
+                        <div class="layui-input-block">
+                            <input th:value="${user.userName}" name="userName" type="text" value="" disabled=""
+                                   class="layui-input layui-disabled"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">旧密码</label>
+                        <div class="layui-input-block">
+                            <input id="oldPwd" name="oldPas" type="password" value="" placeholder="请输入旧密码"
+                                   lay-verify="required"
+                                   class="layui-input pwd"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">新密码</label>
+                        <div class="layui-input-block">
+                            <input id="newPwd" type="password" value="" placeholder="请输入新密码" lay-verify="required"
+                                   name="newPas" class="layui-input pwd"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">确认密码</label>
+                        <div class="layui-input-block">
+                            <input type="password" id="confirmPwd" value="" placeholder="请确认密码" lay-verify="required"
+                                   class="layui-input pwd"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class=""
+                                    style="background-color: #0D8BBD;color: #FFFFFF;margin-left: 47%;margin-top: 10px;height: 30px;width: 100px"
+                                    lay-submit="" lay-filter="changePwd">立即修改
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--main End!-->
+
+<!--底部 Start!-->
+<div id="ft" th:replace="front/public:: footer"></div>
+<!--底部 End!-->
+</body>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript" src="/resource/js/remindMessage.js"></script>
+<script type="text/javascript" src="/resource/js/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+
+    layui.use(['table', 'layer', 'laydate', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            form = layui.form
+        form.on('submit(changePwd)', function (data) {
+            if ($("#confirmPwd").val() != $("#newPwd").val()) {
+                layer.msg("两次密码输入不一致!");
+                return false;
+            }
+            $.ajax({
+                url: '/updatePas',
+                type: 'post',
+                data: data.field,
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (result.status) {
+                        $("#oldPwd").val("");
+                        $("#newPwd").val("");
+                        $("#confirmPwd").val("");
+                        layer.msg("设置成功!");
+                    } else {
+                        layer.msg(result.msg);
+                    }
+                    form.render();
+                }
+
+            });
+        });
+    });
+
+</script>
+</html>

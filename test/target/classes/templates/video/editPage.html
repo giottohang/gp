@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+    <link href="/resource/css/book02.css" rel="stylesheet" type="text/css">
+</head>
+
+<style>
+    .layui-edge {
+        display: none;
+    }
+</style>
+<body class="index">
+<div class="book_con01">
+    <h1 class="book_h01">编辑视频</h1>
+    <div class="layui-form">
+        <div class="top">
+            <div>
+                <div class="top_out">
+                    <input name="id" hidden th:value="${video.id}">
+                    <table class="table" style="width: 100%">
+                        <tbody>
+                        <tr>
+                            <td>标题<span>*</span></td>
+                            <td colspan="8"><input type="text" class="layui-input" name="title" placeholder="请输入标题"
+                                                   minlength="2" th:value="${video.title}"
+                                                   lay-verify="required"></td>
+                        </tr>
+                        <tr>
+                            <td>视频<span>*</span></td>
+                            <td><input type="text" id="wordSrc" th:value="${video.url}" readonly
+                                       class="layui-input" style="width: 40%">
+                                <input hidden name="url" id="url" th:value="${video.url}"></td>
+                        </tr>
+                        <tr>
+                            <td>封面图<span>*</span></td>
+                            <td><input type="text" id="imgSrc" th:value="${video.img}" readonly
+                                       class="layui-input" style="width: 40%">
+                                <input hidden name="img" id="img" th:value="${video.img}"></td>
+                        </tr>
+                        <tr>
+                            <td>描述<span>*</span></td>
+                            <td colspan="8" style="text-align: left">
+                                <textarea id="editor" th:utext="${video.info}" class="layui-textarea" name="info"
+                                          style="height: 200px"></textarea>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class=" but_p">
+            <button class="but_save" type="submit" lay-submit="" lay-filter="Submit">发布</button>
+        </div>
+        <div style="clear: both;padding-bottom: 40px"></div>
+    </div>
+</div>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['table', 'layer', 'upload', 'form', 'layedit'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            layedit = layui.layedit,
+            upload = layui.upload,
+            form = layui.form;
+        //上传文件
+        upload.render({
+            elem: '#wordSrc'
+            , url: '/upload.do'
+            , accept: 'video'
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                $("#url").val(res.obje);
+                $("#wordSrc").val(res.obje);
+                return layer.msg('上传成功');
+            }
+            , error: function () {
+                return layer.msg('上传失败');
+            }
+        });
+        upload.render({
+            elem: '#imgSrc'
+            , url: '/upload.do'
+            , accept: 'file'
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                $("#img").val(res.obje);
+                $("#imgSrc").val(res.obje);
+                return layer.msg('上传成功');
+            }
+            , error: function () {
+                return layer.msg('上传失败');
+            }
+        });
+        form.on('submit(Submit)', function (data) {
+            data.field.info = layedit.getContent(index)
+            $.ajax({
+                url: '/video/video.do',
+                type: 'put',
+                data: data.field,
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    if (!result.status) {
+                        parent.layer.msg(result.msg, {time: 2000});
+                        return false;
+                    } else {
+                        layer.msg("编辑成功!", {
+                            time: 900,
+                            end: function () {
+                                location.reload()
+                            }
+                        })
+                    }
+                }
+
+            });
+        });
+        layedit.set({
+            //暴露layupload参数设置接口 --详细查看layupload参数说明
+            uploadImage: {
+                url: '/layeditUpload.do',
+                accept: 'image',
+                acceptMime: 'image/*',
+                exts: 'jpg|png|gif|bmp|jpeg',
+                size: '10240'
+            }
+            , uploadVideo: {
+                url: '/layeditUpload.do',
+                accept: 'video',
+                acceptMime: 'video/*',
+                exts: 'mp4|flv|avi|rm|rmvb',
+                size: '20480'
+            }
+            //右键删除图片/视频时的回调参数，post到后台删除服务器文件等操作，
+            //传递参数：
+            //图片： imgpath --图片路径
+            //视频： filepath --视频路径 imgpath --封面路径
+            , calldel: {
+                url: '/Attachment/DeleteFile'
+            }
+            //开发者模式 --默认为false
+            , devmode: true
+            //插入代码设置
+            , codeConfig: {
+                hide: true,  //是否显示编码语言选择框
+                default: 'javascript' //hide为true时的默认语言格式
+            }
+            , tool: [
+                'code', 'strong', 'italic', 'underline', 'del', 'addhr', 'fontFomatt', 'face'
+                , 'left', 'center', 'right', 'link', 'unlink', 'images', 'image_alt', 'video', 'anchors'
+                , 'table', 'fullScreen']
+
+        });
+        var index = layedit.build('editor', {
+            height: 400 //设置编辑器高度
+        });
+    });
+
+</script>
+
+</body>
+</html>

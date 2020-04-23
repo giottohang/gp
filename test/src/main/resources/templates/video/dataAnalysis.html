@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link rel="stylesheet" href="/resource/common/layui/css/layui.css" media="all"/>
+    <link href="/resource/js/bstable/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/resource/js/bstable/css/bootstrap-table.css" rel="stylesheet" type="text/css">
+    <link href="/resource/css/table.css" rel="stylesheet" type="text/css">
+</head>
+<style>
+
+</style>
+<body style="background-color: #ecf0f5;font-family: 楷体;color: #475059;overflow: auto">
+<div class="notice_main ">
+    <div id="echarts" style="height: 600px;"></div>
+</div>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/resource/js/echarts.min.js"></script>
+<script type="text/javascript">
+    layui.use(['table', 'layer', 'laydate', 'form'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            layer = layui.layer,
+            laydate = layui.laydate,
+            form = layui.form;
+    });
+
+    $(document).ready(function(){
+        $.ajax({
+            url: '/video/selectDataAnalysis.do',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+              console.log(result.obje);
+              var num=new Array();
+              var date=new Array();
+              for (var i=0;i<result.obje.length;i++){
+                  num[i]=result.obje[i].num;
+                  date[i]=result.obje[i].date;
+                }
+                var myChart = echarts.init(document.getElementById('echarts'));
+                var option={
+                    //标题
+                    title:{
+                        text:'月上传量统计'
+                    },
+                    //工具箱
+                    tooltip : {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985'
+                            }
+                        }
+                    },
+                    //保存图片
+                    toolbox:{
+                        show:true,
+                        feature:{
+                            saveAsImage:{
+                                show:true
+                            }
+                        }
+                    },
+                    //图例-每一条数据的名字叫上传量
+                    legend:{
+                        data:['上传量']
+                    },
+                    //x轴
+                    xAxis:{
+                        data:date
+                    },
+                    //y轴没有显式设置，根据值自动生成y轴
+                    yAxis:{},
+                    //数据-data是最终要显示的数据
+                    series:[{
+                        name:'上传量',
+                        type:'line',
+                        data:num
+                    }]
+                };
+                myChart.setOption(option);
+            }
+        });
+    })
+</script>
+
+</body>
+</html>

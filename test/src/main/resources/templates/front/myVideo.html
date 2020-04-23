@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html class="htmlBg" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title th:text="${wbeParameter.name}"></title>
+    <link rel="stylesheet" type="text/css" href="/resource/css/front/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/resource/css/front/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/resource/js/bootstrap/css/bootstrap.min.css"/>
+</head>
+<body class="bodyBg">
+<!--头部 Start!-->
+<div id="hd" class="wp clearfix" th:replace="front/public:: heads"></div>
+<!--头部 End!-->
+<!--导航 Start!-->
+<ul id="nav" class="clearfix wp" th:replace="front/public:: nav"></ul>
+<!--导航 End!-->
+
+<!--main Start!-->
+<div id="main" class="wp clearfix">
+    <div class="alert" style="float:right; width: 350px">
+    </div>
+    <div class="leftMenu fl">
+        <dl>
+
+            <dd><a href="/front/userCenter.do">我的关注</a></dd>
+            <dd><a href="/front/userInfo.do">个人信息</a></dd>
+            <dd><a href="/front/updataPass.do">修改密码</a></dd>
+            <dd><a href="/front/upToVideo.do">上传作品</a></dd>
+            <dt>
+					<span>
+						<h4>我的作品</h4>
+						<h5>MY VIDEO</h5>
+					</span>
+            </dt>
+            <dd><a href="/front/myCollectionsVideo.do">我的收藏</a></dd>
+        </dl>
+    </div>
+    <div class="rightCon fr">
+        <div class="conTop clearfix">
+            <div class="crumbs">
+                <a href="index.html">首页</a>
+                <i>-</i>
+                <span>个人中心</span>
+            </div>
+            <div class="conTit clearfix">
+                <span>我的作品</span>
+            </div>
+        </div>
+        <div class="conMain">
+            <ul class="newsList">
+                <li class="clearfix" th:each="video:${videoList}">
+                    <a th:href="${'/front/videoDetail.do?id='+video.id}" th:text="${video.title}"></a>
+                    <span th:text="${#strings.substring(video.time,0,11)}"></span>
+                    <span class="delVideo" th:id="${video.id}" style="color: #0D8BBD">删除</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--main End!-->
+
+<!--底部 Start!-->
+<div id="ft" th:replace="front/public:: footer"></div>
+<!--底部 End!-->
+</body>
+<script type="text/javascript" src="/resource/common/layui/layui.js"></script>
+<script type="text/javascript" src="/resource/js/remindMessage.js"></script>
+<script type="text/javascript" src="/resource/js/bootstrap/js/bootstrap.min.js"></script>
+<script th:inline="javascript">
+    layui.use(['table', 'layer', 'element', 'form', 'laypage', 'layedit'], function () {
+        var table = layui.table,
+            $ = layui.$,
+            element = layui.element,
+            layedit = layui.layedit,
+            layer = layui.layer,
+            laypage = layui.laypage,
+            form = layui.form;
+
+
+        //关注
+        $('.delVideo').on('click', function () {
+            var id = $(this).attr("id");
+            layer.confirm('是否删除?', function (index) {
+                $.ajax({
+                    url: "/video/video.do",
+                    type: "post",
+                    data: {_method: "DELETE", "id": id},
+                    dataType: "json",
+                    success: function (result) {
+                        layer.close(index);
+                        layer.msg("删除成功!", {
+                            time: 900,
+                            end: function () {
+                                location.reload()
+                            }
+                        })
+                    }
+                });
+
+            })
+        })
+
+
+    });
+</script>
+</html>

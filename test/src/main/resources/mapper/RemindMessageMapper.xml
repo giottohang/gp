@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.it.mapper.RemindMessageMapper">
+    <!-- 根据userId查询所拥有的角色列表 -->
+    <select id="selectRoleListByUserId" parameterType="com.it.entity.RemindMessage" resultType="com.it.entity.RemindMessage">
+		select
+		id as Id,updateId as UpdateId, videoId as VideoId,readFlag as ReadFlag,createTime as CreateTime
+		from gm_remindMessage
+		where
+		readFlag=0;
+		<if test=" Id != null">
+           and id=#{Id}
+        </if>
+        <if test=" UpdateId != null and UpdateId != ''">
+            and updateId=#{UpdateId}
+        </if>
+        <if test=" VideoId != null">
+            and videoId=#{VideoId}
+        </if>
+	</select>
+
+</mapper>
