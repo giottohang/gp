@@ -211,7 +211,8 @@ public class VideoController {
     public TableResultResponse selectOprateLog(Log log, int page, int limit) {
         try {
             String datetime=log.getTime();
-            LogVO logVO = elasticsearchService.selectLogByPage(datetime, page, limit);
+            String userName=log.getUserName();
+            LogVO logVO = elasticsearchService.selectLogByPage(datetime,userName,page, limit);
             List<Map<String, Object>> infoList = new ArrayList<>();
             for (Log log1 : logVO.getLogList()) {
                 Map<String, Object> resultMap = new HashMap<>(16);
@@ -228,13 +229,13 @@ public class VideoController {
     }
 
     @ResponseBody
-    @PostMapping("/oprateLogExport.do")
-    public ResultResponse oprateLogExport(@RequestParam(name = "date") String date, HttpServletRequest request, HttpServletResponse response) {
+    @GetMapping("/oprateLogExport.do")
+    public ResultResponse oprateLogExport(@RequestParam(name = "date") String date,@RequestParam(name = "userName") String userName, HttpServletRequest request, HttpServletResponse response) {
         try {
             if (date==null||"".equals(date)){
                 return Result.resuleError("日期为空");
             }
-           elasticsearchService.oprateLogExport(date,request,response);
+           elasticsearchService.oprateLogExport(date,userName,request,response);
             return Result.resuleSuccess("导出操作日志数据成功");
         }catch (Exception e){
             return Result.resuleError("导出操作日志数据失败");

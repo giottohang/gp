@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.it.entity.Log;
 import com.it.entity.vo.LogVO;
 import com.it.service.ElasticsearchService;
+import com.it.util.ExcelUtil;
 import com.it.util.LogEsUtil;
-import com.znlh.commons.excel.ExcelUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -59,7 +59,7 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
     }
 
     @Override
-    public LogVO selectLogByPage(String datetime, Integer pageNo, Integer pageSize) {
+    public LogVO selectLogByPage(String datetime,String userName, Integer pageNo, Integer pageSize) {
         LogVO logVO=new LogVO();
         RestHighLevelClient client = null;
         try {
@@ -69,7 +69,9 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
             SearchRequest searchRequest = new SearchRequest("operate_log");
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
             BoolQueryBuilder queryBuilder = boolQuery();
-
+            if (userName!=null&&!"".equals(userName)){
+                queryBuilder.must(QueryBuilders.termQuery("userName.keyword", userName));
+            }
             RangeQueryBuilder rangequerybuilder = QueryBuilders.rangeQuery("time.keyword");
             //获取开始时间和结束时间
             String beginTime=dealDateFormat(DateTime.parse(datetime).minuteOfDay().withMinimumValue().toString());
@@ -117,7 +119,7 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
     }
 
     @Override
-    public void oprateLogExport(String date, HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException {
+    public void oprateLogExport(String date,String userName, HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException {
         RestHighLevelClient client = null;
         // 开启连接
         client = logEsUtil.linkEs();
@@ -125,7 +127,9 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
         SearchRequest searchRequest = new SearchRequest("operate_log");
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         BoolQueryBuilder queryBuilder = boolQuery();
-
+        if (userName!=null&&!"".equals(userName)){
+            queryBuilder.must(QueryBuilders.termQuery("userName.keyword", userName));
+        }
         RangeQueryBuilder rangequerybuilder = QueryBuilders.rangeQuery("time.keyword");
         //获取开始时间和结束时间
         String beginTime=dealDateFormat(DateTime.parse(date).minuteOfDay().withMinimumValue().toString());
@@ -143,10 +147,10 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
             list.add(log);
         }
         try {
-            ExcelUtils.exportBigXSSFWithTemplate(new Date().toString(), list, "excel/OprateLog.xlsx", "操作日志数据",
-                    request, response);
-        } catch (IOException e) {
-            log.info("导出操作日志异常");
+//            ExcelUtils.exportXSSFWithTemplate(list, "excel/OprateLog.xlsx", "OprateLog", request, response);
+            ExcelUtil.export(response,list,"OprateLog",Log.class);
+        } catch (IOException | IllegalAccessException e) {
+
         }finally {
             // 关闭连接
             logEsUtil.closeEs(client);

@@ -16,7 +16,7 @@ import java.util.List;
 public interface ElasticsearchService {
     boolean save(Log log) throws IOException;
 
-    LogVO selectLogByPage(String datetime, Integer pageNo, Integer pageSize);
+    LogVO selectLogByPage(String datetime,String userName, Integer pageNo, Integer pageSize);
 
-    void oprateLogExport(String date,HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException;
+    void oprateLogExport(String date,String userName,HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException;
 }

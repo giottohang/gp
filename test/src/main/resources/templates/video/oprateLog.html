@@ -16,6 +16,8 @@
 <div class="notice_main ">
     <div class="notice_check" style="padding: 16px 15px 8px 15px">
         <p>
+            <label class="">用户名：</label>
+            <input type="text" id="userName" class="find_input">
             <label class="">日期：</label>
             <input type="text" id="date" class="find_input" style="width: 200px; ">
             <button class="check_btn" id="search">查询</button>
@@ -56,32 +58,24 @@
 
         //导出
         $('#export').on('click', function () {
+            var username=$("#userName").val();
             var time = $("#date").val();
-            console.log(time);
-            $.ajax({
-                url: "/video/oprateLogExport.do",
-                type: "post",
-                data: {"date":time},
-                dataType: "json",
-                success: function (result) {
-                    console.log(result)
-                }
-            });
-            $.ajax({
-                url: "/video/oprateLogExport.do",
-                type: "post",
-                data: {"date": time},
-                dataType: "json",
-                success: function (result) {
-                    console.log(result);
-                }
-            });
+            if (time == "" || time == null){
+                alert("请输入日期");
+            }
+            if (username == "" || username == null){
+                window.location.href = "/video/oprateLogExport.do?date="+time;
+            }else {
+                window.location.href = "/video/oprateLogExport.do?date="+time+"&userName="+username;
+            }
+
         });
 
         active = {
             reload: function () {
+                var username=$("#userName").val();
                 var time = $("#date").val();
-                if (date==""){
+                if (time == "" || time == null){
                     alert("请输入日期");
                 }
                 //执行重载
@@ -93,6 +87,7 @@
                     }
                     , where: {
                         time: time,
+                        userName:username,
                     }
                 });
             }
