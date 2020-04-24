@@ -62,13 +62,13 @@
             var time = $("#date").val();
             if (time == "" || time == null){
                 alert("请输入日期");
-            }
-            if (username == "" || username == null){
-                window.location.href = "/video/oprateLogExport.do?date="+time;
             }else {
-                window.location.href = "/video/oprateLogExport.do?date="+time+"&userName="+username;
+                if (username == "" || username == null){
+                    window.location.href = "/video/oprateLogExport.do?date="+time;
+                }else {
+                    window.location.href = "/video/oprateLogExport.do?date="+time+"&userName="+username;
+                }
             }
-
         });
 
         active = {
@@ -77,19 +77,20 @@
                 var time = $("#date").val();
                 if (time == "" || time == null){
                     alert("请输入日期");
+                }else{
+                    //执行重载
+                    table.reload('tableId', {
+                        url: '/video/selectOprateLog.do', //数据接口
+                        method: 'get'
+                        , page: {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                        , where: {
+                            time: time,
+                            userName:username,
+                        }
+                    });
                 }
-                //执行重载
-                table.reload('tableId', {
-                    url: '/video/selectOprateLog.do', //数据接口
-                    method: 'get'
-                    , page: {
-                        curr: 1 //重新从第 1 页开始
-                    }
-                    , where: {
-                        time: time,
-                        userName:username,
-                    }
-                });
             }
         };
     });

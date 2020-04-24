@@ -4,7 +4,7 @@ import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
-import com.it.util.poi.ExcelTitle;
+import com.it.util.ExcelTitle;
 import lombok.Data;
 import java.io.Serializable;
 
